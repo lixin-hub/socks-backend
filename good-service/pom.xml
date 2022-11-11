@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
      <artifactId>socks-backend</artifactId>
-        <groupId>org.socks</groupId>
+        <groupId>com.socks.parent</groupId>
         <version>1.0</version>
     </parent>
     <groupId>com.lx</groupId>

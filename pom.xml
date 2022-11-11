@@ -8,8 +8,10 @@
         <module>user-service</module>
         <module>file-service</module>
         <module>spring-gateway</module>
+        <!--公共模块-->
+        <module>common</module>
     </modules>
-    <groupId>org.socks</groupId>
+    <groupId>com.socks.parent</groupId>
     <artifactId>socks-backend</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
