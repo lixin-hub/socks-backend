@@ -7,6 +7,7 @@
         <module>good-service</module>
         <module>user-service</module>
         <module>file-service</module>
+        <module>spring-gateway</module>
     </modules>
     <groupId>org.socks</groupId>
     <artifactId>socks-backend</artifactId>

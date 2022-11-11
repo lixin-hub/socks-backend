@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("test")
+//@RequestMapping("good")
 @Slf4j
 public class TestController {
     @Autowired
     RestTemplate restTemplate;
-    @GetMapping("{goodId}")
+    @GetMapping("test/{goodId}")
     public Object test(@PathVariable("goodId") String goodId) {
         String userInfo = restTemplate.getForObject("http://user-service/test/001", String.class);
         log.debug("good-service");

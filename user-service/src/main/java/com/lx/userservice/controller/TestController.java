@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("test")
+@RequestMapping("user")
 @Slf4j
 public class TestController {
-    @GetMapping("{userId}")
+    @GetMapping("test/{userId}")
     public Object test(@PathVariable("userId") String userId) {
         log.debug("user-service");
         return "用户:" + userId;

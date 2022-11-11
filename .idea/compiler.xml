@@ -8,12 +8,16 @@
         <outputRelativeToContentRoot value="true" />
         <module name="good-service" />
         <module name="user-service" />
+        <module name="file-service" />
+        <module name="spring-gateway" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="file-service" options="-parameters" />
       <module name="good-service" options="-parameters" />
+      <module name="spring-gateway" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>
