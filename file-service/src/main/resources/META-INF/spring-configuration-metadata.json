@@ -1,0 +1,48 @@
+{
+  "groups": [
+    {
+      "name": "oss",
+      "type": "com.lx.fileservice.oss.OssProperties",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "oss.access-key",
+      "type": "java.lang.String",
+      "description": "用户名",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    },
+    {
+      "name": "oss.default-bucket-name",
+      "type": "java.lang.String",
+      "description": "默认存储桶名，没有指定时，会放在默认的存储桶",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    },
+    {
+      "name": "oss.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否开启",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    },
+    {
+      "name": "oss.endpoint",
+      "type": "java.lang.String",
+      "description": "OSS 访问端点，集群时需提供统一入口",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    },
+    {
+      "name": "oss.secret-key",
+      "type": "java.lang.String",
+      "description": "密码",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    },
+    {
+      "name": "oss.type",
+      "type": "com.lx.fileservice.oss.OssType",
+      "description": "存储对象服务器类型",
+      "sourceType": "com.lx.fileservice.oss.OssProperties"
+    }
+  ],
+  "hints": []
+}

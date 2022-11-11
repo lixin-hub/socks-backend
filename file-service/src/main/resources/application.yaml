@@ -1,0 +1,10 @@
+server:
+  port: 9000
+oss:
+  enabled: true
+  type: MINIO
+  endpoint: http://42.193.22.5:9000
+  access-key: bully
+  secret-key: LiXin-724811
+  default-bucket-name: pearl-buckent
+
