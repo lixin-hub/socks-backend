@@ -1,5 +1,6 @@
 package com.lx.goodservice.pojo;
 
+import com.lx.Entity;
 import lombok.*;
 
 import java.util.Date;
@@ -9,8 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class GoodDetail {
+public class GoodDetail extends Entity<GoodDetail> {
 
   private String id;
   private String goodDetail;
