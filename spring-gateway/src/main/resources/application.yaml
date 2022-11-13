@@ -36,3 +36,9 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/order/**
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/file/**
+ribbon:
+  ServerListRefreshInterval: 3000
