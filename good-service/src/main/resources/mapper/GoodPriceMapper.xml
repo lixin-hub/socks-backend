@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lx.goodservice.dao.GoodPriceDao">
+
+
+    <select id="selectByGoodId" resultType="com.lx.goodservice.pojo.GoodPrice">
+        select *
+        from good.good_price
+        where `good_price`.good_id = #{id}
+          and `good_price`.is_new = 1  order by create_time Desc limit 0 ,1
+    </select>
+
+</mapper>

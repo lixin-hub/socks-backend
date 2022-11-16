@@ -7,7 +7,9 @@ import com.lx.common.base.Entity;
 import com.lx.common.annotation.EntityField;
 import com.lx.goodservice.service.GoodCategoryService;
 import com.lx.goodservice.service.GoodDetailService;
+import com.lx.goodservice.service.GoodPriceService;
 import lombok.*;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.Date;
 
@@ -47,5 +49,7 @@ public class GoodInfo extends Entity<GoodInfo>{
   @TableField(exist = false)
   @EntityField(service = GoodCategoryService.class)
   private GoodCategory goodCategory;
+  @EntityField(service = GoodPriceService.class)
+  private GoodPrice goodPrice;
 
 }

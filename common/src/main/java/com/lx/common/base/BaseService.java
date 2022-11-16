@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> {
 
     @Autowired
-    D dao;
+    public D dao;
 
     public IPage<T> selectPage(T t) {
         return selectPage(t, t.normalWrapper());
@@ -30,6 +30,7 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
         if (page == null) {
             page = new Page<>();
         }
+//        page.setOptimizeCountSql(false);
         return dao.selectPage(page, wrapper);
     }
 

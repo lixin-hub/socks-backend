@@ -44,8 +44,8 @@ public class GoodInfoServiceTest {
     public void page() {
         GoodInfo nike = GoodInfo.builder().goodName("人")
                 .build().queryType("like");
-        nike.setPage(new PageDto<>(1, 3));
-        IPage<GoodInfo> page = service.selectPage(nike);
+        nike.setPage(new PageDto<>(1, 20));
+        IPage<GoodInfo> page = service.selectPage(nike,nike.normalWrapper());
         page.getRecords().forEach(System.out::println);
     }
 

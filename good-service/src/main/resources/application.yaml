@@ -13,12 +13,15 @@ spring:
         cluster-name: CQ
   application:
     name: good-service
-mybatis:
+mybatis-plus:
   type-aliases-package: com.lx.goodservice.pojo
   configuration:
-    map-underscore-to-camel-case: true
-logging:
-  level:
-    com.lx: debug
-  pattern:
-    dateformat: MM-dd HH:mm:ss:SSS
+    map-underscore-to-camel-case: true #驼峰命名
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+  global-config:
+    db-config:
+      logic-delete-field: status
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+  mapper-locations: classpath*:/mapper/*.xml

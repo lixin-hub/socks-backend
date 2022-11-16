@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lx.goodservice.dao.GoodInfoDao">
+    <resultMap id="baseMap" type="com.lx.goodservice.pojo.GoodInfo" autoMapping="true">
+        <result column="goof_info.id" property="id"/>
+        <association property="goodDetail" javaType="com.lx.goodservice.pojo.GoodDetail" autoMapping="true">
+            <id property="id" column="id"/>
+        </association>
+                <association property="goodPrice" javaType="com.lx.goodservice.pojo.GoodPrice" autoMapping="true">
+                    <id property="id" column="id"/>
+                </association>
+<!--        <association autoMapping="true" property="goodPrice" javaType="com.lx.goodservice.pojo.GoodPrice" column="id"-->
+<!--                     select="com.lx.goodservice.dao.GoodPriceDao.selectByGoodId"/>-->
+        <association property="goodCategory" javaType="com.lx.goodservice.pojo.GoodCategory" autoMapping="true">
+            <id property="id" column="id"/>
+        </association>
+    </resultMap>
+
+    <select id="selectPage" resultMap="baseMap">
+        select
+            good_info.id , good_name, good_image, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
+            good_price.id pid, good_price.good_id, price, good_price.update_time, is_new, good_price.create_time, good_price.status,
+            good_detail.id , good_introduce, last_introduce, good_detail.update_time, good_detail.create_time, cat_one_level, cat_tow_level, cat_three_level, good_detail.status,
+            good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level
+        from `good`.good_info left join good.good_detail on good_info.id=good_detail.id
+                              left join good.good_category on good_info.id=good_category.id
+                              left join good.good_price on good_info.id=good_price.id
+        where good_info.status = 0 and good_price.is_new=1
+    </select>
+
+</mapper>
