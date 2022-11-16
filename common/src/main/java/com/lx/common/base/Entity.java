@@ -1,11 +1,13 @@
-package com.lx;
+package com.lx.common.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lx.common.util.Util;
 import lombok.*;
 
 import java.util.Date;
@@ -26,7 +28,11 @@ public abstract class Entity<T> {
     protected Date updateTime;
     @TableField(fill = FieldFill.INSERT)
     protected Date createTime;
-    protected String status= String.valueOf(0);
+    /**
+     * 逻辑删除
+     */
+    @TableLogic(value = "0", delval = "-1")
+    protected String status = String.valueOf(0);
     @Getter(onMethod = @__(@JsonIgnore))
     @Setter(onMethod = @__(@JsonProperty))
     protected transient QueryWrapper<T> normalWrapper = new QueryWrapper<T>().eq("status", NORMAL);
@@ -35,22 +41,25 @@ public abstract class Entity<T> {
     protected transient QueryWrapper<T> deletedWrapper = new QueryWrapper<T>().eq("status", DELETED);
     @Getter(onMethod = @__(@JsonIgnore))
     @Setter(onMethod = @__(@JsonProperty))
-    protected transient QueryWrapper<T> deprecatedWrapper = new QueryWrapper<T>().eq("status", DELETED);
+    protected transient QueryWrapper<T> deprecatedWrapper = new QueryWrapper<T>().eq("status", DEPRECATED);
+    @TableField(exist = false)
+    @Setter(value =AccessLevel.NONE)
+    @Getter(value =AccessLevel.NONE)
+    private String queryType="eq";
+
+    public T queryType(String type) {
+        this.queryType = type;
+        return (T) this;
+    }
 
     public abstract String getId();
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public QueryWrapper<T> likeWrapper() {
         return Util.wrapper((T) this, "like");
-    }public QueryWrapper<T> normalWrapper() {
-        return Util.wrapper((T) this, "like");
+    }
+
+    public QueryWrapper<T> normalWrapper() {
+        return Util.wrapper((T) this, queryType);
     }
 
     public QueryWrapper<T> eqWrapper() {

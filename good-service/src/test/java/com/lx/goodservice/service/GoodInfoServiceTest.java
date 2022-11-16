@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.yaml.snakeyaml.events.Event;
 
 import java.util.List;
 
@@ -28,20 +29,23 @@ public class GoodInfoServiceTest {
     GoodInfoDao goodInfoDao;
 
     @Test
+    public void selectById(){
+        GoodInfo goodInfo = service.selectById("2");
+        System.out.println(goodInfo);
+    }
+    @Test
     public void list() {
-        List<GoodInfo> goodInfos = service.selectList(GoodInfo.builder().goodName(".").build());
+        List<GoodInfo> goodInfos = service.selectList(GoodInfo.builder().id("1").build());
         assertNotNull(goodInfos);
         goodInfos.forEach(System.out::println);
     }
 
     @Test
     public void page() {
-        GoodInfo nike = GoodInfo.builder().goodName("nike")
-                .build();
+        GoodInfo nike = GoodInfo.builder().goodName("人")
+                .build().queryType("like");
         nike.setPage(new PageDto<>(1, 3));
-        IPage<GoodInfo> page = service.selectPage(nike
-                , new QueryWrapper<GoodInfo>().like("good_name", "ni")
-        );
+        IPage<GoodInfo> page = service.selectPage(nike);
         page.getRecords().forEach(System.out::println);
     }
 

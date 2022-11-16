@@ -1,5 +1,6 @@
 package com.lx.goodservice.controller;
 
+import com.lx.common.base.BaseController;
 import com.lx.goodservice.dao.GoodInfoDao;
 import com.lx.goodservice.pojo.GoodInfo;
 import lombok.extern.slf4j.Slf4j;

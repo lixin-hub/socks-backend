@@ -1,4 +1,4 @@
-package com.lx.goodservice.conf;
+package com.lx.common.conf;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;

@@ -1,13 +1,10 @@
-package com.lx.goodservice.controller;
+package com.lx.common.base;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
-import com.lx.Entity;
-import com.lx.Result;
-import com.lx.Util;
-import com.lx.goodservice.service.BaseService;
+import com.lx.common.util.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

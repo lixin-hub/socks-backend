@@ -1,7 +1,6 @@
-package com.lx;
+package com.lx.common.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;

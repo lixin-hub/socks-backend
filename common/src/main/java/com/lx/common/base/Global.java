@@ -1,4 +1,4 @@
-package com.lx;
+package com.lx.common.base;
 
 public class Global {
     public static Object TRUE=true;

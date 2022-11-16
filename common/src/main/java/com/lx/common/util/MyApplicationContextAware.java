@@ -1,4 +1,4 @@
-package com.lx.goodservice.conf;
+package com.lx.common.util;
 
 import lombok.Getter;
 import org.springframework.beans.BeansException;

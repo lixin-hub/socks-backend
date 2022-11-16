@@ -1,10 +1,13 @@
-package com.lx.goodservice.conf;
+package com.lx.common.conf;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * @author LIXIN
+ */
 @Configuration
 public class RestTemplateConfig {
     @Bean

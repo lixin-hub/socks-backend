@@ -1,4 +1,4 @@
-package com.lx;
+package com.lx.common.util;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -62,10 +62,12 @@ public class Util {
                     case "like":
                     wrapper = wrapper.like(name, value);
                     break;
-
+                default:
+                    throw new IllegalStateException("Unexpected value: " + type);
             }
         }
-        return wrapper.eq("status",Entity.NORMAL);
+        /* return wrapper.eq("status",Entity.NORMAL); */
+        return wrapper;
     }
 
     /**

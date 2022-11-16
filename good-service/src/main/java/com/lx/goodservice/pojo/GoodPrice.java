@@ -1,6 +1,8 @@
 package com.lx.goodservice.pojo;
 
-import com.lx.Entity;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.lx.common.base.Entity;
 import lombok.*;
 
 import java.util.Date;
@@ -10,8 +12,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode(callSuper = true)
 public class GoodPrice extends Entity<GoodPrice> {
-
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     private double price;
     private Date updateTime;

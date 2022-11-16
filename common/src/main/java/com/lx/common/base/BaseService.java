@@ -1,11 +1,11 @@
-package com.lx.goodservice.service;
+package com.lx.common.base;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lx.Entity;
+import com.lx.common.annotation.AutoFill;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,12 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
     D dao;
 
     public IPage<T> selectPage(T t) {
-        return selectPage(t, t.eqWrapper());
+        return selectPage(t, t.normalWrapper());
     }
 
     public IPage<T> selectPage(T t, QueryWrapper<T> wrapper) {
         Page<T> page = t.getPage();
+        page.setSearchCount(true);
         if (page == null) {
             page = new Page<>();
         }
@@ -33,19 +34,20 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
     }
 
     public List<T> selectList(T t) {
-        return selectList(t.eqWrapper());
+        return selectList(t.normalWrapper());
     }
 
     public List<T> selectList(QueryWrapper<T> wrapper) {
         return dao.selectList(wrapper);
     }
 
+    @AutoFill
     public T selectById(Serializable id) {
         return dao.selectById(id);
     }
 
     public T selectOne(T t) {
-        return selectOne(t, t.eqWrapper());
+        return selectOne(t, t.normalWrapper());
     }
 
     public T selectOne(T t, QueryWrapper<T> wrapper) {
@@ -57,7 +59,7 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
     }
 
     public Integer selectCount(T t) {
-        return selectCount(t, t.eqWrapper());
+        return selectCount(t, t.normalWrapper());
     }
 
     public Integer selectCount(T t, QueryWrapper<T> wrapper) {
@@ -69,7 +71,7 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
     }
 
     public int delete(T t) {
-        return delete(t.eqWrapper());
+        return delete(t.normalWrapper());
     }
 
     public int delete(QueryWrapper<T> wrapper) {
