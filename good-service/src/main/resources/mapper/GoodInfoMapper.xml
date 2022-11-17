@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lx.goodservice.dao.GoodInfoDao">
     <resultMap id="baseMap" type="com.lx.goodservice.pojo.GoodInfo" autoMapping="true">
-        <result column="goof_info.id" property="id"/>
+        <result column="id" property="id"/>
         <association property="goodDetail" javaType="com.lx.goodservice.pojo.GoodDetail" autoMapping="true">
             <id property="id" column="id"/>
         </association>
@@ -24,8 +24,9 @@
             good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level
         from `good`.good_info left join good.good_detail on good_info.id=good_detail.id
                               left join good.good_category on good_info.id=good_category.id
-                              left join good.good_price on good_info.id=good_price.id
-        where good_info.status = 0 and good_price.is_new=1
+                              left join good.good_price on good_info.id=good_price.good_id
+       ${ew.customSqlSegment} and  good_info.status = '0' and good_price.is_new='1'
+
     </select>
 
 </mapper>

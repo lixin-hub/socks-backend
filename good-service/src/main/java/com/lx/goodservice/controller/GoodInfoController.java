@@ -1,9 +1,13 @@
 package com.lx.goodservice.controller;
 
 import com.lx.common.base.BaseController;
+import com.lx.common.base.Result;
 import com.lx.goodservice.dao.GoodInfoDao;
+import com.lx.goodservice.dto.AddGoodDTO;
 import com.lx.goodservice.pojo.GoodInfo;
+import com.lx.goodservice.service.GoodInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -17,12 +21,13 @@ import java.util.Collection;
 @RestController
 @RequestMapping("good")
 @Slf4j
-public class GoodController extends BaseController<GoodInfo, GoodInfoDao> {
+public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
 
 
     @PostMapping("page")
     @Override
     public Object selectPage(@RequestBody GoodInfo entity) {
+//        entity.queryType("like");
         return super.selectPage(entity);
     }
 
@@ -51,9 +56,20 @@ public class GoodController extends BaseController<GoodInfo, GoodInfoDao> {
         return super.selectCount(entity);
     }
 
-    @PostMapping("insert")
-    public Object insert(@RequestBody GoodInfo entity) {
-        return super.insert(entity);
+    @PostMapping("addGoodInfo")
+    public Object addGoodInfo(@RequestBody AddGoodDTO entity) {
+        if (entity == null) {
+            return Result.builder().notOk(400).message("参数为空~").build();
+        }
+        if (StringUtils.isBlank(entity.getGoodName()) ||
+                entity.getGoodPrice() == 0 ||
+                entity.getGoodStoke() == 0
+        ) {
+            return Result.builder().notOk(400).message("参数错误").data(entity).build();
+        }
+
+        int i = ((GoodInfoService) service).addGoodInfo(entity);
+        return Result.builder().status(i > 0).build();
     }
 
     @PostMapping("delete")

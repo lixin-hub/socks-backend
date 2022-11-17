@@ -17,6 +17,7 @@ public class GoodPrice extends Entity<GoodPrice> {
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     private double price;
+    private String  goodId;
     private Date updateTime;
     private boolean isNew;
 

@@ -13,10 +13,11 @@ import java.util.Date;
 @Data
 public class Result<T> {
     IPage<T> page;//可能为空
-    private int code=200;
+    private int code = 200;
     private T data;
     private Object message;
-    private boolean status=true;
+
+    private boolean status = true;
 
     public static <T> ResultBuilder<T> builder(Class<T> clazz) {
         return new ResultBuilder<>();
@@ -28,20 +29,43 @@ public class Result<T> {
 
     public static class ResultBuilder<T> {
         Result<T> result;
+        private Object successMessage;
+        private Object failMessage;
 
         public ResultBuilder() {
             result = new Result<>();
         }
-        public ResultBuilder<T> status(boolean status){
+
+        public ResultBuilder<T> status(boolean status) {
             result.setStatus(status);
             return this;
         }
+
         public ResultBuilder<T> code(int code) {
             result.setCode(code);
             return this;
         }
-        public ResultBuilder<T> ok() {
+
+        public ResultBuilder<T> ok(Object message) {
             result.setCode(200);
+            this.successMessage = message;
+            return this;
+        } public ResultBuilder<T> ok() {
+            result.setCode(200);
+            this.successMessage = "操作成功";
+            return this;
+        }
+
+        public ResultBuilder<T> notOk(int code, Object message) {
+            result.setCode(code);
+            this.failMessage = message;
+            result.status = false;
+            return this;
+        }
+        public ResultBuilder<T> notOk(int code) {
+            result.setCode(code);
+            this.failMessage = "操作失败";
+            result.status = false;
             return this;
         }
 
@@ -62,7 +86,15 @@ public class Result<T> {
 
 
         public Result<T> build() {
-            if (result.message==null){
+            if (result.message != null) {
+               return result;
+            }
+            if (result.status) {
+                result.message = successMessage;
+            } else {
+                result.message = failMessage;
+            }
+            if (result.message == null) {
                 result.setMessage(new Date());
             }
             return result;

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lx.common.util.Util;
@@ -18,20 +19,21 @@ import java.util.Date;
 @ToString
 public abstract class Entity<T> {
     public static final String NORMAL = "0";//正常
-    public static final String DELETED = "-1";//删除
-    public static final String DEPRECATED = "0";//弃用
+    public static final String DELETED = "1";//删除
+    public static final String DEPRECATED = "2";//弃用
 
 
     @TableField(exist = false)
     protected PageDto<T> page;
     @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     protected Date updateTime;
     @TableField(fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     protected Date createTime;
     /**
      * 逻辑删除
      */
-    @TableLogic(value = "0", delval = "-1")
     protected String status = String.valueOf(0);
     @Getter(onMethod = @__(@JsonIgnore))
     @Setter(onMethod = @__(@JsonProperty))
@@ -43,8 +45,6 @@ public abstract class Entity<T> {
     @Setter(onMethod = @__(@JsonProperty))
     protected transient QueryWrapper<T> deprecatedWrapper = new QueryWrapper<T>().eq("status", DEPRECATED);
     @TableField(exist = false)
-    @Setter(value =AccessLevel.NONE)
-    @Getter(value =AccessLevel.NONE)
     private String queryType="eq";
 
     public T queryType(String type) {

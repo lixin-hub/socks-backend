@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
 import com.lx.goodservice.dao.GoodInfoDao;
+import com.lx.goodservice.dto.AddGoodDTO;
 import com.lx.goodservice.pojo.GoodInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -42,10 +43,14 @@ public class GoodInfoServiceTest {
 
     @Test
     public void page() {
-        GoodInfo nike = GoodInfo.builder().goodName("人")
+        GoodInfo nike = GoodInfo.builder().goodName("邦诺姿")
                 .build().queryType("like");
         nike.setPage(new PageDto<>(1, 20));
         IPage<GoodInfo> page = service.selectPage(nike,nike.normalWrapper());
+        System.out.println("-------------------");
+        System.out.println(nike.normalWrapper().getExpression());
+        System.out.println(nike.normalWrapper().getSqlSegment());
+        System.out.println("-------------------");
         page.getRecords().forEach(System.out::println);
     }
 
@@ -58,6 +63,17 @@ public class GoodInfoServiceTest {
     @Test
     public void insert() {
         int re = service.insert(GoodInfo.builder().goodName("哈哈哈").build());
+        assertTrue(re > 0);
+    }@Test
+    public void insertInfo() {
+        AddGoodDTO addGoodDTO = new AddGoodDTO();
+        addGoodDTO.setGoodName("测试1");
+        addGoodDTO.setGoodPrice(100.0F);
+        addGoodDTO.setGoodIntroduce("呵呵呵，这是一个商品");
+        addGoodDTO.setPic("这是图");
+        addGoodDTO.setGoodStoke(10);
+
+        int re = service.addGoodInfo(addGoodDTO);
         assertTrue(re > 0);
     }
 

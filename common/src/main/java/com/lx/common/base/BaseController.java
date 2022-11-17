@@ -22,6 +22,7 @@ import java.util.List;
 public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
 
     @Autowired
+    public
     BaseService<T,D> service;
 
     @PostMapping("page")
@@ -84,8 +85,13 @@ public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
 
     @GetMapping("delete/{id}")
     public Object deleteById(@PathVariable Serializable id) {
+        Util.newIfNull(id);
         int i = service.deleteById(id);
-        return Result.builder().status(i > 0).data(i).build();
+        boolean status = i > 0;
+        String message;
+        if (status) message="删除成功";
+        else message="删除失败";
+        return Result.builder().status(status).message(message).data(i).build();
     }
 
     @PostMapping("deleteBatchIds")

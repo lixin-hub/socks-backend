@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 public class Util {
     /**
      * @param entity 实体
-     * @param <T> 类型
+     * @param <T>    类型
      * @return 如果对象为空，创建一新的
      */
     public static <T> T newIfNull(T entity) {
-        log.debug("entity=》" + entity);
+        log.debug("entity->" + entity);
         if (entity != null) return entity;
         entity = (T) new Object();
         return entity;
@@ -45,7 +45,7 @@ public class Util {
                 name = Objects.equals(annotation.value(), "") ? name : annotation.value();
             }
 
-             name = humpToUnderline(name);
+            name = humpToUnderline(name);
             switch (type) {
                 case "eq":
                     wrapper = wrapper.eq(name, value);
@@ -59,7 +59,7 @@ public class Util {
                 case "ge":
                     wrapper = wrapper.le(name, value);
                     break;
-                    case "like":
+                case "like":
                     wrapper = wrapper.like(name, value);
                     break;
                 default:
@@ -79,7 +79,7 @@ public class Util {
         Matcher matcher = Pattern.compile(regex).matcher(str);
         while (matcher.find()) {
             String target = matcher.group();
-            str = str.replaceAll(target, "_"+target.toLowerCase());
+            str = str.replaceAll(target, "_" + target.toLowerCase());
         }
         return str;
     }

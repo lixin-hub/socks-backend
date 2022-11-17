@@ -11,7 +11,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -26,10 +28,10 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
 
     public IPage<T> selectPage(T t, QueryWrapper<T> wrapper) {
         Page<T> page = t.getPage();
-        page.setSearchCount(true);
         if (page == null) {
             page = new Page<>();
         }
+        page.setSearchCount(true);
 //        page.setOptimizeCountSql(false);
         return dao.selectPage(page, wrapper);
     }
@@ -42,7 +44,6 @@ public abstract class BaseService<T extends Entity<T>, D extends BaseMapper<T>> 
         return dao.selectList(wrapper);
     }
 
-    @AutoFill
     public T selectById(Serializable id) {
         return dao.selectById(id);
     }
