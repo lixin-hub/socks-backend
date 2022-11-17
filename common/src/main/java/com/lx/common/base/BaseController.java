@@ -17,13 +17,11 @@ import java.util.Collection;
 import java.util.List;
 
 
-
 @Slf4j
 public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
 
     @Autowired
-    public
-    BaseService<T,D> service;
+    public BaseService<T, D> service;
 
     @PostMapping("page")
     public Object selectPage(@RequestBody T entity) {
@@ -35,8 +33,8 @@ public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
     @PostMapping("list")
     public Object selectList(T entity) {
         Util.newIfNull(entity);
-        if (entity.getPage()==null){
-            entity.setPage(new PageDto<>(1,100,false));
+        if (entity.getPage() == null) {
+            entity.setPage(new PageDto<>(1, 100, false));
         }
         IPage<T> list = service.selectPage(entity);
         return Result.builder().data(list.getRecords()).build();
@@ -72,6 +70,9 @@ public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
 
     public Object insert(T entity) {
         Util.newIfNull(entity);
+        if (entity.getId() != null) {
+            return this.updateById(entity);
+        }
         int insert = service.insert(entity);
         return Result.builder().status(insert > 0).data(insert).build();
     }
@@ -89,8 +90,8 @@ public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
         int i = service.deleteById(id);
         boolean status = i > 0;
         String message;
-        if (status) message="删除成功";
-        else message="删除失败";
+        if (status) message = "删除成功";
+        else message = "删除失败";
         return Result.builder().status(status).message(message).data(i).build();
     }
 
@@ -107,13 +108,13 @@ public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
         updateWrapper.eq("id", entity.getId());
         entity.setNormalWrapper(updateWrapper);
         int i = service.updateById(entity);
-        return Result.builder().status(i > 0).data(i).build();
+        return Result.builder().ok().status(i > 0).data(i).build();
     }
 
     @PostMapping("update")
     public Object update(T entity) {
         Util.newIfNull(entity);
-        int i = service.update(entity,entity.eqWrapper());
+        int i = service.update(entity, entity.eqWrapper());
         return Result.builder().status(i > 0).data(i).build();
     }
 

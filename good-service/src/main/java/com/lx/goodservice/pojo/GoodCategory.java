@@ -33,6 +33,7 @@ public class GoodCategory extends TreeEntity<GoodCategory> {
      */
     private String name;
 
+    private String note;
 
 
 }

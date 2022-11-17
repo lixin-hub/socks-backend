@@ -50,11 +50,14 @@ public class Result<T> {
             result.setCode(200);
             this.successMessage = message;
             return this;
-        } public ResultBuilder<T> ok() {
+        }
+
+        public ResultBuilder<T> ok() {
             result.setCode(200);
             this.successMessage = "操作成功";
             return this;
         }
+
 
         public ResultBuilder<T> notOk(int code, Object message) {
             result.setCode(code);
@@ -62,6 +65,7 @@ public class Result<T> {
             result.status = false;
             return this;
         }
+
         public ResultBuilder<T> notOk(int code) {
             result.setCode(code);
             this.failMessage = "操作失败";
@@ -87,7 +91,7 @@ public class Result<T> {
 
         public Result<T> build() {
             if (result.message != null) {
-               return result;
+                return result;
             }
             if (result.status) {
                 result.message = successMessage;
