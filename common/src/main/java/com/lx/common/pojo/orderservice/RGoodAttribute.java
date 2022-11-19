@@ -1,4 +1,4 @@
-package com.lx.goodservice.pojo;
+package com.lx.common.pojo.orderservice;
 
 import com.lx.common.base.Entity;
 import lombok.Builder;
