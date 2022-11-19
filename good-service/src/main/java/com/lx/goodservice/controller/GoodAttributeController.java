@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author LIXIN
@@ -54,7 +55,7 @@ public class GoodAttributeController extends BaseController<GoodAttribute, GoodA
 
 
     @PostMapping("listId")
-    public Object selectBatchIds(Collection<? extends Serializable> idList) {
+    public Object selectBatchIds(@RequestBody List<Serializable> idList) {
         return super.selectBatchIds(idList);
     }
 

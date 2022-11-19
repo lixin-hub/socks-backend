@@ -1,6 +1,5 @@
 package com.lx.goodservice.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
 import com.lx.goodservice.pojo.GoodCategory;
 import lombok.extern.slf4j.Slf4j;

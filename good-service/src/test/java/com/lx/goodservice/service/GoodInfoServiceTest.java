@@ -1,6 +1,5 @@
 package com.lx.goodservice.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
 import com.lx.goodservice.dao.GoodInfoDao;
@@ -12,8 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.yaml.snakeyaml.events.Event;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -31,8 +30,10 @@ public class GoodInfoServiceTest {
 
     @Test
     public void selectById(){
-        GoodInfo goodInfo = service.selectById("2");
-        System.out.println(goodInfo);
+        List<GoodInfo> goodInfos = service.selectBatchIds(Arrays.asList("16f9e4eac37acecd60939b1a3b11cde2","fb463e99ddc83395c8d7acc8bb8f65eb"));
+        for (GoodInfo goodInfo : goodInfos) {
+            System.out.println(goodInfo);
+        }
     }
     @Test
     public void list() {

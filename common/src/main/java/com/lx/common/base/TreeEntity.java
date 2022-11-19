@@ -2,14 +2,19 @@ package com.lx.common.base;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public abstract class TreeEntity<T> extends Entity<T> {
+    @TableField(exist = false)
+    public List<T> children;
     /**
      * 分类级别
      */
@@ -18,8 +23,12 @@ public abstract class TreeEntity<T> extends Entity<T> {
      * 父级分类
      */
     private String parent;
-    @TableField(exist = false)
-    public List<T> children;
+//    private boolean isRoot;
+    private boolean isLeaf;
+
+    public boolean isRoot() {
+        return parent==null||parent.equals("0");
+    }
 
     public void addChild(T child) {
         if (children == null) {

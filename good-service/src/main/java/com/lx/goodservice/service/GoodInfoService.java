@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +73,10 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
     @Override
     public IPage<GoodInfo> selectPage(GoodInfo goodInfo, QueryWrapper<GoodInfo> wrapper) {
         return super.selectPage(goodInfo, wrapper);
+    }
+
+    @Override
+    public GoodInfo selectById(Serializable id) {
+        return super.selectById(id);
     }
 }

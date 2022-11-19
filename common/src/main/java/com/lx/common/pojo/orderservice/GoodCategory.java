@@ -1,4 +1,4 @@
-package com.lx.goodservice.pojo;
+package com.lx.common.pojo.orderservice;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

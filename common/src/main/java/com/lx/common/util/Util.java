@@ -46,6 +46,7 @@ public class Util {
             }
 
             name = humpToUnderline(name);
+            log.info("name:{},type:{},value:{}",name,type,value);
             switch (type) {
                 case "eq":
                     wrapper = wrapper.eq(name, value);
@@ -67,6 +68,7 @@ public class Util {
             }
         }
         /* return wrapper.eq("status",Entity.NORMAL); */
+
         return wrapper;
     }
 

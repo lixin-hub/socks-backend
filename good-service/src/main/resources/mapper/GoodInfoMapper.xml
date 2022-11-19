@@ -28,5 +28,32 @@
        ${ew.customSqlSegment} and  good_info.status = '0' and good_price.is_new='1'
 
     </select>
+    <select id="selectById" resultMap="baseMap">
+        select
+            good_info.id , good_name, good_image, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
+            good_price.id pid, good_price.good_id, price, good_price.update_time, is_new, good_price.create_time, good_price.status,
+            good_detail.id , good_introduce, last_introduce, good_detail.update_time, good_detail.create_time, cat_one_level, cat_tow_level, cat_three_level, good_detail.status,
+            good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level
+        from `good`.good_info left join good.good_detail on good_info.id=good_detail.id
+                              left join good.good_category on good_info.id=good_category.id
+                              left join good.good_price on good_info.id=good_price.good_id
+            where good_info.id=#{id} and  good_info.status = '0' and good_price.is_new='1'
+    </select>
+
+    <select id="selectBatchIds" parameterType="list" resultMap="baseMap" >
+        select
+        good_info.id , good_name, good_image, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
+        good_price.id pid, good_price.good_id, price, good_price.update_time, is_new, good_price.create_time, good_price.status,
+        good_detail.id , good_introduce, last_introduce, good_detail.update_time, good_detail.create_time, cat_one_level, cat_tow_level, cat_three_level, good_detail.status,
+        good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level
+        from `good`.good_info left join good.good_detail on good_info.id=good_detail.id
+        left join good.good_category on good_info.id=good_category.id
+        left join good.good_price on good_info.id=good_price.good_id
+        where good_info.id in
+        <foreach collection = "coll" item = "dramaId" open = "(" close = ")" separator = "," >
+            #{dramaId}
+        </foreach>
+        and  good_info.status = '0' and good_price.is_new='1'
+    </select>
 
 </mapper>

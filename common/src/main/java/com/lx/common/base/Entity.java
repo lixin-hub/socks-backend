@@ -34,6 +34,7 @@ public abstract class Entity<T> {
     /**
      * 逻辑删除
      */
+    @TableField(select = false)
     protected String status = String.valueOf(0);
     @Getter(onMethod = @__(@JsonIgnore))
     @Setter(onMethod = @__(@JsonProperty))

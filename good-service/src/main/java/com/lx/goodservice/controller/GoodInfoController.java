@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author LIXIN
@@ -47,7 +48,10 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     }
 
     @PostMapping("listId")
-    public Object selectBatchIds(Collection<? extends Serializable> idList) {
+    public Object selectBatchIds(@RequestBody List<Serializable> idList) {
+        if (idList==null||idList.size()==0){
+            return Result.builder().notOk(400,"参数为空").build();
+        }
         return super.selectBatchIds(idList);
     }
 
@@ -87,7 +91,6 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     public Object deleteBatchIds(Collection<? extends Serializable> idList) {
         return super.deleteBatchIds(idList);
     }
-
     @PostMapping("updateById")
     public Object updateById(@RequestBody GoodInfo entity) {
         return super.updateById(entity);

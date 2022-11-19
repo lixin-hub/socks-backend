@@ -54,7 +54,7 @@ public class BaseController<T extends Entity<T>, D extends BaseMapper<T>> {
     }
 
     @PostMapping("listId")
-    public Object selectBatchIds(Collection<? extends Serializable> idList) {
+    public Object selectBatchIds(List<Serializable> idList) {
         List<T> ts = service.selectBatchIds(idList);
         return Result.builder().ok().data(ts).build();
     }

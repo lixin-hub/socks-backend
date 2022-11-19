@@ -19,6 +19,6 @@ mybatis:
     map-underscore-to-camel-case: true
 logging:
   level:
-    com.lx: debug
+    com.lx.com.lx.userservice: error
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS

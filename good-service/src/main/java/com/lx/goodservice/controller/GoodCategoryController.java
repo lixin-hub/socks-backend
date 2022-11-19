@@ -1,6 +1,5 @@
 package com.lx.goodservice.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDto;
 import com.lx.common.base.BaseController;
 import com.lx.common.base.Result;
