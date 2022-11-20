@@ -2,6 +2,10 @@ package com.lx.common.util;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -22,7 +26,6 @@ public class Util {
         entity = (T) new Object();
         return entity;
     }
-
     public static <T> QueryWrapper<T> wrapper(T t, final String type) {
         Class<T> clazz = (Class<T>) t.getClass();
         QueryWrapper<T> wrapper = new QueryWrapper<>();
@@ -46,7 +49,7 @@ public class Util {
             }
 
             name = humpToUnderline(name);
-            log.info("name:{},type:{},value:{}",name,type,value);
+            log.info("name:{},type:{},value:{}", name, type, value);
             switch (type) {
                 case "eq":
                     wrapper = wrapper.eq(name, value);
