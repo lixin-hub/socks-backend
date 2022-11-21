@@ -22,12 +22,12 @@ import java.util.List;
 public class BaseControllerImpl<D extends BaseMapper<T>, T extends Entity<T>> {
 
     @Autowired
-    private ServiceImpl<D, T> service;
+    protected ServiceImpl<D, T> service;
 
     @PostMapping("page")
     public Object selectPage(@RequestBody T entity) {
         Util.newIfNull(entity);
-        IPage<T> page = service.page(entity.getPage(), entity.normalWrapper);
+        IPage<T> page = service.page(entity.getPage(), entity.normalWrapper());
         return new Result.ResultBuilder<T>().ok().page(page).build();
     }
 
@@ -37,7 +37,7 @@ public class BaseControllerImpl<D extends BaseMapper<T>, T extends Entity<T>> {
         if (entity.getPage() == null) {
             entity.setPage(new PageDto<>(1, 100, false));
         }
-        IPage<T> list = service.page(entity.getPage(),entity.normalWrapper);
+        IPage<T> list = service.page(entity.getPage(),entity.normalWrapper());
         return Result.builder().data(list.getRecords()).build();
     }
 
@@ -50,7 +50,7 @@ public class BaseControllerImpl<D extends BaseMapper<T>, T extends Entity<T>> {
     @PostMapping("first")
     public Object selectOne(T entity) {
         Util.newIfNull(entity);
-        T data = service.getOne(entity.normalWrapper);
+        T data = service.getOne(entity.normalWrapper());
         return Result.builder().ok().data(data).build();
     }
 
@@ -63,7 +63,7 @@ public class BaseControllerImpl<D extends BaseMapper<T>, T extends Entity<T>> {
     @PostMapping("count")
     public Object selectCount(T entity) {
         Util.newIfNull(entity);
-        Integer integer = service.count(entity.normalWrapper);
+        Integer integer = service.count(entity.normalWrapper());
         return Result.builder().status(integer > 0).data(integer).build();
     }
 
@@ -81,7 +81,7 @@ public class BaseControllerImpl<D extends BaseMapper<T>, T extends Entity<T>> {
     @PostMapping("delete")
     public Object delete(T entity) {
         Util.newIfNull(entity);
-        boolean delete = service.remove(entity.normalWrapper);
+        boolean delete = service.remove(entity.normalWrapper());
         return Result.builder().status(delete).build();
     }
 
@@ -114,7 +114,7 @@ public class BaseControllerImpl<D extends BaseMapper<T>, T extends Entity<T>> {
     @PostMapping("update")
     public Object update(T entity) {
         Util.newIfNull(entity);
-        boolean i = service.update(entity,entity.normalWrapper);
+        boolean i = service.update(entity,entity.normalWrapper());
         return Result.builder().status(i).build();
     }
 

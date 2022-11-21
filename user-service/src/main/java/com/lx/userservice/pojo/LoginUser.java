@@ -1,14 +1,13 @@
 package com.lx.userservice.pojo;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.lx.common.base.Entity;
 import lombok.*;
 
 /**
  * login_user
- * @author 
+ *
+ * @author
  */
 @Data
 @NoArgsConstructor
@@ -28,7 +27,9 @@ public class LoginUser extends Entity<LoginUser> {
      * 密码：加密
      */
     private String password;
-
+    //记住我
+    @TableField(exist = false)
+    private boolean rememberMe;
 
 
 }

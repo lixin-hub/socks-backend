@@ -1,6 +1,8 @@
 package com.lx.userservice.pojo.permission;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.lx.common.base.Entity;
 import lombok.*;
 
@@ -11,9 +13,9 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 public class RRolePermission extends Entity<RRolePermission> {
-
-  private String id;
-  private long roleCode;
-  private long permissionCode;
+    @TableId(type = IdType.AUTO)
+    private String id;
+    private long roleCode;
+    private long permissionCode;
 
 }

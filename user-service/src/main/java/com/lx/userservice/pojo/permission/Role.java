@@ -1,6 +1,8 @@
 package com.lx.userservice.pojo.permission;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.lx.common.base.Entity;
 import lombok.*;
 
@@ -13,7 +15,7 @@ import java.util.List;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 public class Role extends Entity<Role> {
-
+  @TableId(type = IdType.AUTO)
   private String id;
   private String roleName;
   private String description;

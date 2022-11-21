@@ -21,7 +21,7 @@ public class Util {
      * @return 如果对象为空，创建一新的
      */
     public static <T> T newIfNull(T entity) {
-        log.debug("entity->" + entity);
+        log.info("entity->{}", entity.toString());
         if (entity != null) return entity;
         entity = (T) new Object();
         return entity;
