@@ -21,6 +21,6 @@ public class Role extends Entity<Role> {
   private String description;
   //权限列表
   @TableField(exist = false)
-  private List<String> permissions;
+  private List<Permission> permissions;
 
 }

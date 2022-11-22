@@ -15,7 +15,7 @@ import lombok.*;
 public class RRolePermission extends Entity<RRolePermission> {
     @TableId(type = IdType.AUTO)
     private String id;
-    private long roleCode;
-    private long permissionCode;
+    private String roleCode;
+    private String permissionCode;
 
 }

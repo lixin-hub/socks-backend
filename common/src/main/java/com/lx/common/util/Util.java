@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lx.common.base.TreeEntity;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Util {
@@ -87,5 +89,18 @@ public class Util {
             str = str.replaceAll(target, "_" + target.toLowerCase());
         }
         return str;
+    }
+
+    public static <T extends TreeEntity<T>> List<T> toTree(List<T> src, Collection<T> records){
+        Map<String, T> all = src.stream().collect(Collectors.toMap(TreeEntity::getId, a -> a, (k1, k2) -> k1));
+        for (T record : src) {
+            String parent = record.getParent();
+            if (all.containsKey(parent)) {
+                all.get(parent).addChild(record);
+            }
+        }
+        List<T> root = new ArrayList<>(10);
+        records.forEach(i -> root.add(all.get(i.getId())));
+        return root;
     }
 }

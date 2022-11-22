@@ -67,7 +67,7 @@ public class MyRealm extends AuthorizingRealm {
         Set<String> permIds = rRolePermissionService.lambdaQuery().in(RRolePermission::getRoleCode, roleIds)
                 .list()
                 .stream()
-                .map(item -> Long.toString(item.getPermissionCode()))
+                .map(RRolePermission::getPermissionCode)
                 .collect(Collectors.toSet());
         // 获取权限名称
         List<Permission> permissions = permissionService.listByIds(permIds);

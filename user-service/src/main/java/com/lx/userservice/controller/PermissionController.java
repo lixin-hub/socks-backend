@@ -8,9 +8,11 @@ import com.lx.userservice.dao.permission.RoleDao;
 import com.lx.userservice.pojo.permission.Permission;
 import com.lx.userservice.pojo.permission.Role;
 import com.lx.userservice.service.permission.PermissionService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("sys/perm")
@@ -24,6 +26,12 @@ public class PermissionController extends BaseControllerImpl<PermissionDao, Perm
     public Object selectTree(@RequestBody Permission entity) {
         PageDto<Permission> tree = ((PermissionService) service).tree(entity.getPage(), entity.normalWrapper());
         return Result.builder(Permission.class).ok().page(tree).build();
+    }
+    @GetMapping("{roleId}/tree")
+    public Object selectTree(@PathVariable String roleId) {
+        log.info("roleId:{}",roleId);
+        Collection<Permission> permissions = ((PermissionService) service).rolePermtTree(roleId);
+        return Result.builder().ok().data(permissions).build();
     }
 
 
@@ -48,6 +56,9 @@ public class PermissionController extends BaseControllerImpl<PermissionDao, Perm
     @Override
     @PostMapping("insert")
     public Object insert(@RequestBody Permission entity) {
+        if (entity!=null&& StringUtils.isBlank(entity.getParent())){
+            entity.setParent("0");
+        }
         return super.insert(entity);
     }
 }
