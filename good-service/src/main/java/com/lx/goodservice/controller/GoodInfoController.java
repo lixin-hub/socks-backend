@@ -8,6 +8,7 @@ import com.lx.goodservice.pojo.GoodInfo;
 import com.lx.goodservice.service.GoodInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -61,6 +62,7 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     }
 
     @PostMapping("addGoodInfo")
+    @RequiresPermissions("good:add")
     public Object addGoodInfo(@RequestBody AddGoodDTO entity) {
         if (entity == null) {
             return Result.builder().notOk(400).message("参数为空~").build();
@@ -77,12 +79,14 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     }
 
     @PostMapping("delete")
+    @RequiresPermissions("goods:delete")
     @Override
     public Object delete(@RequestBody GoodInfo entity) {
         return super.delete(entity);
     }
 
     @GetMapping("delete/{id}")
+    @RequiresPermissions("goods:delete")
     public Object deleteById(@PathVariable Serializable id) {
         return super.deleteById(id);
     }

@@ -1,4 +1,4 @@
-package com.lx.userservice.conf;
+package com.lx.common.conf;
 
 
 import com.auth0.jwt.exceptions.JWTVerificationException;

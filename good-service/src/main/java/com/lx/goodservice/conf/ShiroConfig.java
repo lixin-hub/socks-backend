@@ -1,4 +1,4 @@
-package com.lx.userservice.conf;
+package com.lx.goodservice.conf;
 
 import com.lx.common.conf.JwtFilter;
 import com.lx.common.conf.JwtRealm;
@@ -14,15 +14,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
-    @Autowired
-    MyRealm myRealm;
     @Autowired
     JwtRealm jwtRealm;
 
@@ -51,23 +48,19 @@ public class ShiroConfig {
             perms:拥有对某个资源的权限才能访问
             role:拥有某个角色权限才能访问
          */
-        filterRuleMap.put("/auth/login", "anon");
         filterRuleMap.put("/**", "jwt");
         Map<String, Filter> map = new HashMap<>();
         //设置jwt过滤器
         map.put("jwt", new JwtFilter());
         factoryBean.setFilters(map);
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
-//        设置登录页面
-        factoryBean.setLoginUrl("/auth/login");
-
         return factoryBean;
     }
 
     @Bean("manager")
     public DefaultWebSecurityManager manager() {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        manager.setRealms(Arrays.asList(myRealm, jwtRealm));
+        manager.setRealm(jwtRealm);
 //        manager.setRememberMeManager(rememberMeManager());
         return manager;
     }

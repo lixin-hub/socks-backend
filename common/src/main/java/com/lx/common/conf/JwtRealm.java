@@ -1,4 +1,4 @@
-package com.lx.userservice.conf;
+package com.lx.common.conf;
 
 import com.alibaba.fastjson.JSONArray;
 import com.auth0.jwt.interfaces.Claim;
@@ -13,12 +13,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Deprecated
+@Component
 public class JwtRealm extends AuthorizingRealm {
 
 

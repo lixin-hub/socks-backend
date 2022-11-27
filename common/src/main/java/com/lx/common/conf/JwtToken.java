@@ -1,10 +1,12 @@
-package com.lx.userservice.conf;
+package com.lx.common.conf;
 
 import org.apache.shiro.authc.AuthenticationToken;
+import org.springframework.stereotype.Component;
 
 /*
     JwtToken代替原生的UsernamePasswordToken
  */
+@Component
 public class JwtToken implements AuthenticationToken {
 
     private String jwt;
