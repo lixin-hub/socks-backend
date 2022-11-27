@@ -13,6 +13,11 @@ public class JwtToken implements AuthenticationToken {
         this.jwt = jwt;
     }
 
+    JwtToken() {
+
+    }
+
+
     //返回原来的字符串，解析交给JwtUtils实现
     @Override
     public Object getPrincipal() {

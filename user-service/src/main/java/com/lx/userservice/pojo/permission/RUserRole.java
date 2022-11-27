@@ -15,7 +15,7 @@ import lombok.*;
 public class RUserRole extends Entity<RUserRole> {
   @TableId(type = IdType.AUTO)
   private String id;
-  private long roleCode;
+  private String roleCode;
   private String userId;
 
 }

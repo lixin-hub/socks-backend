@@ -11,8 +11,8 @@ public class SpringBootGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootGatewayApplication.class, args);
     }
-    @Bean
-    public IRule rule(){
-        return new RandomRule();
-    }
+//    @Bean
+//    public IRule rule(){
+//        return new RandomRule();
+//    }
 }

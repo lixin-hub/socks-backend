@@ -1,6 +1,10 @@
 package com.lx.userservice.conf;
 
+import com.alibaba.fastjson.JSONArray;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lx.common.util.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -9,8 +13,12 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.stereotype.Component;
-@Component
+
+import java.util.List;
+import java.util.Map;
+
+@Slf4j
+@Deprecated
 public class JwtRealm extends AuthorizingRealm {
 
 
@@ -29,9 +37,21 @@ public class JwtRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String jwt = (String) principalCollection.getPrimaryPrincipal();
-        // TODO: 2022/11/21
+        DecodedJWT decodedJWT = JwtUtils.getToken(jwt);
+        Map<String, Claim> claims = decodedJWT.getClaims();
+        Claim permission = claims.get("permissions");
+        List<String> permissions = JSONArray.parseArray(permission.asString(), String.class);
+        log.info("permissions:{}", permissions);
+        Claim role = claims.get("roles");
+        List<String> roles = JSONArray.parseArray(role.asString(), String.class);
+        log.info("roles:{}", roles);
+        Claim userId = claims.get("userId");
+        log.info("userId:{}", userId);
+        Claim username = claims.get("userName");
+        log.info("username:{}", username);
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.addRole("user");
+        authorizationInfo.addRoles(roles);
+        authorizationInfo.addStringPermissions(permissions);
         return authorizationInfo;
     }
 
@@ -40,6 +60,6 @@ public class JwtRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String jwt = (String) authenticationToken.getPrincipal();
         JwtUtils.isVerify(jwt);
-        return new SimpleAuthenticationInfo(jwt,jwt,"JwtRealm");
+        return new SimpleAuthenticationInfo(jwt, jwt, "JwtRealm");
     }
 }

@@ -2,6 +2,7 @@ package com.lx.common.conf;
 
 import com.lx.common.base.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,5 +33,19 @@ public class ExceptionController {
         log.error("发生异常：{}", e.getMessage());
         e.printStackTrace();
         return Result.builder().notOk(400, e.getMessage()).build();
+    }
+    @ResponseBody
+    @ExceptionHandler(UnauthorizedException.class)
+    public Object excep3(HttpServletRequest req, UnauthorizedException e) {
+        log.error("发生异常：{}", e.getMessage());
+        e.printStackTrace();
+        return Result.builder().notOk(400,"没有权限访问").build();
+    }
+    @ResponseBody
+    @ExceptionHandler(RuntimeException.class)
+    public Object excep3(HttpServletRequest req, RuntimeException e) {
+        log.error("发生异常：{}", e.getMessage());
+        e.printStackTrace();
+        return Result.builder().notOk(400,e.getMessage()).build();
     }
 }

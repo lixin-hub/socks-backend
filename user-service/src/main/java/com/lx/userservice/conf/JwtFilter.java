@@ -15,7 +15,7 @@ public class JwtFilter extends AccessControlFilter {
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        httpResponse.setHeader("Access-Control-Allow-Origin", httpRequest.getHeader("Origin"));
+//        httpResponse.setHeader("Access-Control-Allow-Origin", httpRequest.getHeader("Origin"));
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
         httpResponse.setHeader("Content-Type","application/json;charset=UTF-8");
         if (httpRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {

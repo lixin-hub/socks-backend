@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lx.common.util.Util;
 import com.lx.userservice.dao.permission.RRolePermissionDao;
+import com.lx.userservice.pojo.UserInfo;
 import com.lx.userservice.pojo.permission.Permission;
 import com.lx.userservice.pojo.permission.RRolePermission;
+import com.lx.userservice.pojo.permission.RUserRole;
 import com.lx.userservice.pojo.permission.Role;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +75,5 @@ public class RRolePermissionService extends ServiceImpl<RRolePermissionDao, RRol
                 .filter(i -> "0".equals(i.getParent()))
                 .collect(Collectors.toSet()));
     }
+
 }

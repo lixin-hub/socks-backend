@@ -91,7 +91,7 @@ public class Util {
         return str;
     }
 
-    public static <T extends TreeEntity<T>> List<T> toTree(List<T> src, Collection<T> records){
+    public static <T extends TreeEntity<T>> List<T> toTree(Collection<T> src, Collection<T> records){
         Map<String, T> all = src.stream().collect(Collectors.toMap(TreeEntity::getId, a -> a, (k1, k2) -> k1));
         for (T record : src) {
             String parent = record.getParent();

@@ -1,6 +1,7 @@
 package com.lx.userservice.service;
 
 import com.lx.userservice.pojo.LoginUser;
+import com.lx.userservice.pojo.Menu;
 import com.lx.userservice.pojo.UserInfo;
 import com.lx.userservice.pojo.permission.Permission;
 import com.lx.userservice.pojo.permission.RRolePermission;
@@ -62,7 +63,7 @@ public class LoginUserServiceTest {
         Set<String> permIds = rRolePermissionService.lambdaQuery().in(RRolePermission::getRoleCode, roleIds)
                 .list()
                 .stream()
-                .map(item -> Long.toString(item.getPermissionCode()))
+                .map(RRolePermission::getPermissionCode)
                 .collect(Collectors.toSet());
         // 获取权限名称
         List<Permission> permissions = permissionService.listByIds(permIds);
@@ -71,4 +72,9 @@ public class LoginUserServiceTest {
         permNames.forEach(log::info);
     }
 
+    @Test
+    public void getMenus() {
+        Set<Menu> menus = loginUserService.getMenus("1");
+        log.info(String.valueOf(menus));
+    }
 }

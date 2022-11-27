@@ -27,7 +27,7 @@ public abstract class TreeEntity<T> extends Entity<T> {
     private boolean isLeaf;
 
     public boolean isRoot() {
-        return parent==null||parent.equals("0");
+        return "0".equals(getParent());
     }
 
     public void addChild(T child) {

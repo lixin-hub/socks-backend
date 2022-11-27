@@ -48,8 +48,9 @@ public class UserInfo extends Entity<UserInfo> {
      * 角色
      */
     @TableField(exist = false)
-    private List<Role> roles;
+    private List<String> roles;
     @TableField(exist = false)
     private String username;
-
+    @TableField(exist = false)
+    private String password;
 }

@@ -1,6 +1,7 @@
 package com.lx.userservice.pojo.permission;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.lx.common.base.TreeEntity;
 import lombok.*;
@@ -20,5 +21,6 @@ public class Permission extends TreeEntity<Permission> {
     private String note;
     //重写父类属性，加入查询条件
     private String parent;
-
+    private int orders;
+    private String path;
 }

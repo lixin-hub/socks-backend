@@ -1,5 +1,6 @@
 package com.lx.userservice.conf;
 
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSubjectFactory;
 import org.apache.shiro.mgt.SubjectFactory;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -21,8 +22,6 @@ import java.util.Map;
 public class ShiroConfig {
     @Autowired
     MyRealm myRealm;
-    @Autowired
-    JwtRealm jwtRealm;
 
     //    认证过滤器：
 //    anon：无需认证即可访问，游客身份。
@@ -40,10 +39,6 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean filterFactoryBean(@Qualifier("manager") DefaultWebSecurityManager manager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(manager);
-        Map<String, Filter> map = new HashMap<>();
-        //设置jwt过滤器
-//        map.put("jwt", new JwtFilter());
-//        factoryBean.setFilters(map);
         //添加拦截器，对路由进行限制
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         /*
@@ -54,9 +49,13 @@ public class ShiroConfig {
             role:拥有某个角色权限才能访问
          */
         filterRuleMap.put("/auth/login", "anon");
-//        filterRuleMap.put("/**", "jwt");
+        filterRuleMap.put("/**", "jwt");
+        Map<String, Filter> map = new HashMap<>();
+        //设置jwt过滤器
+        map.put("jwt", new JwtFilter());
+        factoryBean.setFilters(map);
         factoryBean.setFilterChainDefinitionMap(filterRuleMap);
-        //设置登录页面
+//        设置登录页面
         factoryBean.setLoginUrl("/auth/login");
 
         return factoryBean;
@@ -65,7 +64,7 @@ public class ShiroConfig {
     @Bean("manager")
     public DefaultWebSecurityManager manager() {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        manager.setRealms(Arrays.asList(myRealm, jwtRealm));
+        manager.setRealm(myRealm);
 //        manager.setRememberMeManager(rememberMeManager());
         return manager;
     }
@@ -120,4 +119,15 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(manager());
         return authorizationAttributeSourceAdvisor;
     }
+
+    /**
+     * JwtRealm 配置自定义匹配器
+     */
+//    @Bean
+//    public JwtRealm jwtRealm() {
+//        JwtRealm jwtRealm = new JwtRealm();
+//        CredentialsMatcher credentialsMatcher = new JwtCredentialsMatcher();
+//        jwtRealm.setCredentialsMatcher(credentialsMatcher);
+//        return jwtRealm;
+//    }
 }

@@ -24,14 +24,12 @@ public class RoleService extends ServiceImpl<RoleDao, Role> {
     public PageDto<Role> tree(Role role) {
         PageDto<Role> page = super.page(role.getPage());
         //角色包含的权限id
-        Set<String> pis = new HashSet<>(page.getRecords().size());
         HashMap<Role, Set<String>> hashMap = new HashMap<>();
         page.getRecords().forEach(item -> {
             Set<String> rapids = rRolePermissionService.lambdaQuery().eq(RRolePermission::getRoleCode, item.getId()).list()
                     .stream()
                     .map(RRolePermission::getPermissionCode).collect(Collectors.toSet());
-            hashMap.put(item, pis);
-            pis.addAll(rapids);
+            hashMap.put(item, rapids);
         });
         List<Role> roles = new ArrayList<>(page.getRecords().size());
         hashMap.forEach((k, v) -> {
