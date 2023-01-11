@@ -96,7 +96,8 @@ public class UserInfoService extends ServiceImpl<UserInfoDao, UserInfo> {
             //角色名称
             roleNames = roles.stream().map(Role::getRoleName).collect(Collectors.toSet());
             res.put("roleNames", roleNames);
-            permIds = rRolePermissionService.lambdaQuery().in(RRolePermission::getRoleCode, roleIds)
+            permIds = rRolePermissionService.lambdaQuery()
+                    .in(RRolePermission::getRoleCode, roleIds)
                     .list()
                     .stream()
                     .map(RRolePermission::getPermissionCode)

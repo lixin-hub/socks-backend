@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 8089
 oss:
   enabled: true
   type: MINIO
@@ -7,11 +7,11 @@ oss:
   access-key: bully
   secret-key: LiXin-724811
   default-bucket-name: pearl-buckent
+spring:
   cloud:
     nacos:
       server-addr: 42.193.22.5:8848
       discovery:
         cluster-name: CQ
-spring:
   application:
     name: file-service

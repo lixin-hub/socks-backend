@@ -1,6 +1,7 @@
 package com.lx.fileservice.controller;
 
 import com.lx.fileservice.minio.MinioTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,9 @@ import java.io.IOException;
  * @description 负责对外暴露文件上传，下载接口
  * @date 2022/11/11 9:49
  */
+@Slf4j
 @RestController
-@RequestMapping("file-service")
+@RequestMapping("file")
 public class FileController {
     @Autowired
     MinioTemplate minioTemplate;
@@ -36,7 +38,7 @@ public class FileController {
         String pattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         // 截取带“/”的参数
         String customPath = new AntPathMatcher().extractPathWithinPattern(pattern,uri);
-        System.out.println(customPath);
+        log.info(customPath);
         return minioTemplate.getPresignedObjectUrl(bucket, customPath);
     }
 }

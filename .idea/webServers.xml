@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="389b97ba-6710-4c9b-8b18-3b266312ae3c" name="socks">
+        <fileTransfer rootFolder="/root" accessType="SFTP" host="42.193.22.5" port="22" sshConfigId="2d6cb1cb-1fda-4bf5-8aa4-b7e186373d2e" sshConfig="root@42.193.22.5:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

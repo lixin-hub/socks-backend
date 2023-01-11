@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="root@42.193.22.5:22" type="ssh/sftp" uuid="65492a93-7b65-4917-bf1e-28a3e469f286">
+        <config>
+          <option name="projectRootOnTarget" value="/root/socks-backend" />
+          <option name="serverName" value="root@42.193.22.5:22 password" />
+        </config>
+        <ContributedStateBase type="JavaLanguageRuntime">
+          <config>
+            <option name="homePath" value="/usr/local/java" />
+            <option name="javaVersionString" value="1.8.0_351" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
