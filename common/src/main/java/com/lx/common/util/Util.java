@@ -1,13 +1,12 @@
 package com.lx.common.util;
 
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lx.common.base.TreeEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -28,6 +27,7 @@ public class Util {
         entity = (T) new Object();
         return entity;
     }
+
     public static <T> QueryWrapper<T> wrapper(T t, final String type) {
         Class<T> clazz = (Class<T>) t.getClass();
         QueryWrapper<T> wrapper = new QueryWrapper<>();
@@ -91,7 +91,7 @@ public class Util {
         return str;
     }
 
-    public static <T extends TreeEntity<T>> List<T> toTree(Collection<T> src, Collection<T> records){
+    public static <T extends TreeEntity<T>> List<T> toTree(Collection<T> src, Collection<T> records) {
         Map<String, T> all = src.stream().collect(Collectors.toMap(TreeEntity::getId, a -> a, (k1, k2) -> k1));
         for (T record : src) {
             String parent = record.getParent();
@@ -103,4 +103,11 @@ public class Util {
         records.forEach(i -> root.add(all.get(i.getId())));
         return root;
     }
+
+    public static boolean isPhone(String username) {
+        Pattern p = Pattern.compile("^1[3,4,5,8][0-9]{9}$"); // 验证手机号
+        Matcher m = p.matcher(username);
+        return m.matches();
+    }
+
 }

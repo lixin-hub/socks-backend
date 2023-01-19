@@ -131,4 +131,7 @@ public class UserInfoService extends ServiceImpl<UserInfoDao, UserInfo> {
         loginUserService.removeById(id);
         return super.removeById(id);
     }
+    public boolean hasPhone(String phone){
+        return super.lambdaQuery().eq(UserInfo::getPhone,phone).one()!=null;
+    }
 }

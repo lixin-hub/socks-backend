@@ -1,15 +1,17 @@
 package com.lx.userservice.controller;
 
+import cn.hutool.cache.impl.TimedCache;
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.toolkit.EncryptUtils;
 import com.lx.common.base.BaseControllerImpl;
 import com.lx.common.base.Result;
 import com.lx.common.util.JwtUtils;
+import com.lx.common.util.Util;
 import com.lx.userservice.conf.MyRealm;
 import com.lx.userservice.dao.LoginUserDao;
 import com.lx.userservice.pojo.LoginUser;
 import com.lx.userservice.pojo.Menu;
+import com.lx.userservice.pojo.UserInfo;
 import com.lx.userservice.pojo.permission.RUserRole;
 import com.lx.userservice.service.LoginUserService;
 import com.lx.userservice.service.UserInfoService;
@@ -38,17 +40,47 @@ public class LoginUserController extends BaseControllerImpl<LoginUserDao, LoginU
     UserInfoService userInfoService;
     @Autowired
     RUserRoleService rUserRoleService;
+    @Autowired
+    TimedCache<String, String> verificationCodeCache;
 
-    @PostMapping("register")
-    public Object register(@RequestBody LoginUser loginUser) {
-        // 密码加密
-        String pass = EncryptUtils.md5Base64(loginUser.getPassword());
-        loginUser.setPassword(pass);
-        return super.insert(loginUser);
+    /**
+     * @param loginUser 用户名和密码
+     * @param tempToken 临时token
+     * @param code      验证码
+     * @return
+     */
+    @PostMapping("register/{tempToken}/{code}")
+    public Object register(@RequestBody LoginUser loginUser, @PathVariable String tempToken, @PathVariable String code) {
+        if (StringUtils.isBlank(code)) {
+            return Result.builder().notOk(400, "请输入验证码").build();
+        }
+        String tCode = verificationCodeCache.get(tempToken);
+        if (tCode == null) {
+            return Result.builder().notOk(400, "验证码已过期").build();
+        }
+        if (!tCode.equals(code)) {
+            return Result.builder().notOk(400, "验证码错误").build();
+        }
+        UserInfo newUser;
+        try {
+            newUser = ((LoginUserService) service).register(loginUser);
+        } catch (IllegalArgumentException e) {
+            return Result.builder().data(loginUser).notOk(400, e.getMessage()).build();
+        } catch (IllegalStateException e) {
+            return Result.builder().data(loginUser).notOk(500, e.getMessage()).build();
+        }
+        return Result.builder().data(newUser).ok("注册成功").build();
+    }
+
+    //当打开网页的时候请求该接口下发临时token
+    @GetMapping("visit")
+    public Object visited() {
+        return Result.builder().ok().data(IdUtil.randomUUID()).build();
     }
 
     @PostMapping("login")
     public Object login(@RequestBody LoginUser loginUser) {
+//        String pass = EncryptUtils.md5Base64(loginUser.getPassword());
         log.info(loginUser.toString());
         // 1.创建UsernamePasswordToken
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(loginUser.getUsername(), loginUser.getPassword());
@@ -67,8 +99,13 @@ public class LoginUserController extends BaseControllerImpl<LoginUserDao, LoginU
             message = "认证失败";
             return Result.builder().notOk(400, message).build();
         }
-        loginUser = service.lambdaQuery().eq(LoginUser::getUsername, loginUser.getUsername()).one();
-
+        String username = loginUser.getUsername();
+        if (Util.isPhone(username)) {
+            UserInfo info = userInfoService.lambdaQuery().eq(UserInfo::getPhone, username).one();
+            loginUser = service.getById(info.getId());
+        } else {
+            loginUser = service.lambdaQuery().eq(LoginUser::getUsername, loginUser.getUsername()).one();
+        }
         HashMap<String, Set<String>> roleAndPermission = userInfoService.getRoleAndPermission(loginUser);
         Set<String> roleNames = roleAndPermission.get("roleNames");
         Set<String> permNames = roleAndPermission.get("permNames");
@@ -109,4 +146,29 @@ public class LoginUserController extends BaseControllerImpl<LoginUserDao, LoginU
         rUserRoleService.save(RUserRole.builder().roleCode(roleId).userId(userId).build());
         return Result.builder().ok().build();
     }
+
+    @GetMapping("/hasPhone/{phone}")
+    public Object hasPhone(@PathVariable String phone) {
+        if (StringUtils.isBlank(phone))
+            return Result.builder().notOk(400, "参数为空").build();
+        boolean hasUser = userInfoService.hasPhone(phone);
+        return Result.builder().data(hasUser).ok().build();
+    }
+    @GetMapping("/hasUser/{username}")
+    public Object hasUser(@PathVariable String username) {
+        if (StringUtils.isBlank(username))
+            return Result.builder().notOk(400, "参数为空").build();
+        boolean hasUser = service.lambdaQuery().eq(LoginUser::getUsername,username).one()!=null;
+        return Result.builder().data(hasUser).ok().build();
+    }
+
+    @GetMapping("/sendCode/")
+    public Object sendCode(@RequestParam("p") String phone, @RequestParam("t") String tempToken) {
+        if (StringUtils.isBlank(phone))
+            return Result.builder().notOk(400, "参数为空").build();
+        ((LoginUserService) service).sendCode(phone, tempToken);
+        return Result.builder().ok("发送成功").build();
+    }
+
+
 }

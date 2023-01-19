@@ -6,7 +6,7 @@
       <paths name="socks">
         <serverdata>
           <mappings>
-            <mapping deploy="/socks" local="$PROJECT_DIR$/spring-gateway/target" web="http://42.193.22.5/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

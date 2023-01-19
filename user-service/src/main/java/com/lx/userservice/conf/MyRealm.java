@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lx.common.util.JwtUtils;
+import com.lx.common.util.Util;
 import com.lx.userservice.pojo.LoginUser;
+import com.lx.userservice.pojo.UserInfo;
 import com.lx.userservice.service.LoginUserService;
+import com.lx.userservice.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -24,7 +27,8 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     private LoginUserService loginUserService;
-
+@Autowired
+private UserInfoService userInfoService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -71,7 +75,15 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        LoginUser account = loginUserService.lambdaQuery().eq(LoginUser::getUsername, token.getUsername()).one();
+        boolean phone = Util.isPhone(token.getUsername());
+        UserInfo userInfo;
+        LoginUser account;
+        if (phone){
+             userInfo = userInfoService.lambdaQuery().eq(UserInfo::getPhone, token.getUsername()).one();
+             account = loginUserService.getById(userInfo.getId());
+        }else {
+             account = loginUserService.lambdaQuery().eq(LoginUser::getUsername, token.getUsername()).one();
+        }
         log.info("LoginUser:{}", account);
         if (account != null) {
             return new SimpleAuthenticationInfo(account, account.getPassword(), getName());

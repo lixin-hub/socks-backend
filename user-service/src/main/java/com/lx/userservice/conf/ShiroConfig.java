@@ -1,15 +1,19 @@
 package com.lx.userservice.conf;
 
+//import com.lx.common.conf.JwtFilter;
 import com.lx.common.conf.JwtFilter;
 import com.lx.common.conf.JwtRealm;
 import org.apache.shiro.mgt.DefaultSubjectFactory;
 import org.apache.shiro.mgt.SubjectFactory;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
+import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,8 +46,24 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean filterFactoryBean(@Qualifier("manager") DefaultWebSecurityManager manager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(manager);
+
+        Map<String, Filter> map = new LinkedHashMap<>();
+//        设置jwt过滤器
+        map.put("jwt", jwtFilterRegBean().getFilter());
+        factoryBean.setFilters(map);
+        factoryBean.setFilterChainDefinitionMap(shiroFilterChainDefinition().getFilterChainMap());
+//        设置登录页面
+        factoryBean.setLoginUrl("/auth/login");
+
+        return factoryBean;
+    }
+    /**
+     * 在此处配置过滤器链
+     */
+    @Bean
+    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
+        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
         //添加拦截器，对路由进行限制
-        Map<String, String> filterRuleMap = new LinkedHashMap<>();
         /*
             anon:无需认证可以直接访问
             auth:必须认证才能访问
@@ -51,19 +71,23 @@ public class ShiroConfig {
             perms:拥有对某个资源的权限才能访问
             role:拥有某个角色权限才能访问
          */
-        filterRuleMap.put("/auth/login", "anon");
-        filterRuleMap.put("/**", "jwt");
-        Map<String, Filter> map = new HashMap<>();
-        //设置jwt过滤器
-        map.put("jwt", new JwtFilter());
-        factoryBean.setFilters(map);
-        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
-//        设置登录页面
-        factoryBean.setLoginUrl("/auth/login");
-
-        return factoryBean;
+        //这些请求不通过jwtFilter
+        chainDefinition.addPathDefinition("/auth/hasPhone/**","anon");
+        chainDefinition.addPathDefinition("/auth/**","anon");
+        // 所有请求通过我们自己的JWT Filter
+        chainDefinition.addPathDefinition("/**","jwt");
+        return chainDefinition;
     }
-
+    /**
+     * 配置JwtFilter过滤器,并设置为未注册状态
+     */
+    public FilterRegistrationBean<JwtFilter> jwtFilterRegBean() {
+        FilterRegistrationBean<JwtFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+        //添加JwtFilter  并设置为未注册状态
+        filterRegistrationBean.setFilter(new JwtFilter());
+        filterRegistrationBean.setEnabled(true);
+        return filterRegistrationBean;
+    }
     @Bean("manager")
     public DefaultWebSecurityManager manager() {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
@@ -76,28 +100,6 @@ public class ShiroConfig {
     public SubjectFactory subjectFactory() {
         return new DefaultSubjectFactory();
     }
-/*
-   @Bean
-    public Cookie simpleCookie() {
-        SimpleCookie cookie = new SimpleCookie("rememberMe");
-        //设为true后，只能通过http访问，javascript无法访问
-        //防止xss读取cookie
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        //存活时间，单位秒；-1表示关闭浏览器该cookie失效
-        cookie.setMaxAge(120);
-        return cookie;
-    }
-*/
-
-/*    @Bean
-    public CookieRememberMeManager rememberMeManager() {
-        CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
-        rememberMeManager.setCookie(simpleCookie());
-        //cookie加密的密钥
-        rememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
-        return rememberMeManager;
-    }*/
 
 
     /**
@@ -122,15 +124,4 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(manager());
         return authorizationAttributeSourceAdvisor;
     }
-
-    /**
-     * JwtRealm 配置自定义匹配器
-     */
-//    @Bean
-//    public JwtRealm jwtRealm() {
-//        JwtRealm jwtRealm = new JwtRealm();
-//        CredentialsMatcher credentialsMatcher = new JwtCredentialsMatcher();
-//        jwtRealm.setCredentialsMatcher(credentialsMatcher);
-//        return jwtRealm;
-//    }
 }

@@ -49,8 +49,6 @@ public class JwtUtils {
             throw new RuntimeException("算法不匹配");
         } catch (InvalidClaimException e) {
             throw new RuntimeException("失效的payload");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

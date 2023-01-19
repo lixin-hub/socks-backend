@@ -12,6 +12,7 @@ import io.minio.messages.Item;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.InputStream;
@@ -87,14 +88,15 @@ public class MinioTemplate {
     /**
      * 上传文件
      *
-     * @param inputStream      流
+     * @param file      流
      * @param originalFileName 原始文件名
      * @param bucketName       桶名
      * @return OssFile
      */
     @SneakyThrows
-    public OssFile putObject(InputStream inputStream, String bucketName, String originalFileName) {
+    public OssFile putObject(MultipartFile file, String bucketName, String originalFileName) {
         String uuidFileName = generateOssUuidFileName(originalFileName);
+        InputStream inputStream=file.getInputStream();
         try {
             if (StrUtil.isEmpty(bucketName)) {
                 bucketName = ossProperties.getDefaultBucketName();
@@ -102,7 +104,7 @@ public class MinioTemplate {
             minioClient.putObject(
                     PutObjectArgs.builder().bucket(bucketName).object(uuidFileName).stream(
                                     inputStream, inputStream.available(), -1)
-                            .contentType("image/jpg")
+                            .contentType(file.getContentType())
                             .build());
             return new OssFile(uuidFileName, originalFileName);
         } finally {

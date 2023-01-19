@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
@@ -26,8 +27,8 @@ public class FileController {
 
     @PostMapping("upload/{bucketName}")
     @ResponseBody
-    public Object upload(@RequestBody MultipartFile file,@PathVariable("bucketName") String bucketName) throws IOException {
-        return minioTemplate.putObject(file.getInputStream(), bucketName, file.getOriginalFilename());
+    public Object upload(@RequestBody MultipartFile file,@PathVariable("bucketName") String bucketName,HttpServletRequest request) throws IOException {
+        return minioTemplate.putObject(file, bucketName, file.getOriginalFilename());
     }
     @GetMapping("preview/{bucket}/**")
     public Object presigned(@PathVariable("bucket") String bucket,HttpServletRequest request)
