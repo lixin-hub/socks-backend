@@ -7,6 +7,7 @@ import com.lx.common.base.Entity;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author LIXIN
@@ -24,7 +25,6 @@ public class GoodInfo extends Entity<GoodInfo> {
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
     private String goodName;
-    private String goodImage;
     private Date upTime;
     private Date downTime;
 
@@ -44,5 +44,8 @@ public class GoodInfo extends Entity<GoodInfo> {
     private GoodCategory goodCategory;
     @TableField(exist = false)
     private GoodPrice goodPrice;
+    @TableField(exist = false)
+    private List<RGoodPics> goodPics;
+
 
 }

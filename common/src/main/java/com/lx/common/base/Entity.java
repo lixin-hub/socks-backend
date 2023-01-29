@@ -35,7 +35,7 @@ public abstract class Entity<T> {
      * 逻辑删除
      */
     @TableField(select = false)
-    protected String status = String.valueOf(0);
+    protected String status = NORMAL;
     @Getter(onMethod = @__(@JsonIgnore))
     @Setter(onMethod = @__(@JsonProperty))
     protected transient QueryWrapper<T> normalWrapper = new QueryWrapper<T>().eq("status", NORMAL);

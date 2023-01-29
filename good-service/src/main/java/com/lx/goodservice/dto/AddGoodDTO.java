@@ -1,8 +1,11 @@
 package com.lx.goodservice.dto;
 
 import com.lx.goodservice.pojo.GoodAttribute;
+import com.lx.goodservice.pojo.RGoodPics;
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,12 +17,24 @@ public class AddGoodDTO {
     String goodCat;
     // 商品详情描述
     String goodIntroduce;
-    String pic;
+    //图片数组
+    List<String> pics;
     GoodAttribute goodAttribute;
     //商品属性
     List<Attr> attrs;
     //属性
     private String attrType;
+
+    public List<RGoodPics> getRGoodPics() {
+        if (pics.size() == 0)
+            return null;
+        List<RGoodPics> rGoodPics = new ArrayList<>(pics.size());
+        for (String pic : pics) {
+            if (!StringUtils.isBlank(pic))
+                rGoodPics.add(RGoodPics.builder().goodPic(pic).build());
+        }
+        return rGoodPics;
+    }
 
     public static class Attr {
         String attrId;

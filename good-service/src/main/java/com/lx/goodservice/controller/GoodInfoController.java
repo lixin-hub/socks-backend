@@ -62,7 +62,7 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     }
 
     @PostMapping("addGoodInfo")
-    @RequiresPermissions("good:add")
+    @RequiresPermissions("goods:add")
     public Object addGoodInfo(@RequestBody AddGoodDTO entity) {
         if (entity == null) {
             return Result.builder().notOk(400).message("参数为空~").build();

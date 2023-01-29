@@ -71,7 +71,6 @@ public class GoodInfoServiceTest {
         addGoodDTO.setGoodName("测试1");
         addGoodDTO.setGoodPrice(100.0F);
         addGoodDTO.setGoodIntroduce("呵呵呵，这是一个商品");
-        addGoodDTO.setPic("这是图");
         addGoodDTO.setGoodStoke(10);
 
         int re = service.addGoodInfo(addGoodDTO);

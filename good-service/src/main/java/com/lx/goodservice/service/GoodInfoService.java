@@ -6,10 +6,7 @@ import com.lx.common.base.BaseService;
 import com.lx.goodservice.dao.GoodInfoDao;
 import com.lx.goodservice.dao.RGoodAttributeDao;
 import com.lx.goodservice.dto.AddGoodDTO;
-import com.lx.goodservice.pojo.GoodDetail;
-import com.lx.goodservice.pojo.GoodInfo;
-import com.lx.goodservice.pojo.GoodPrice;
-import com.lx.goodservice.pojo.RGoodAttribute;
+import com.lx.goodservice.pojo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +27,8 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
     GoodPriceService goodPriceService;
     @Autowired
     GoodDetailService goodDetailService;
+    @Autowired
+    RGoodPicsService rGoodPicsService;
 
     @Resource
     RGoodAttributeDao rGoodAttributeDao;
@@ -41,7 +40,6 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
     public int addGoodInfo(AddGoodDTO dto) {
         GoodInfo goodInfo = GoodInfo.builder()
                 .goodName(dto.getGoodName())
-                .goodImage(dto.getPic())
                 .stoke(Long.valueOf(dto.getGoodStoke())).build();
         int a = super.insert(goodInfo);
         if (a == 0) return a;
@@ -58,7 +56,7 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
         int e = goodDetailService.insert(detail);
         if (e == 0) return e;
         List<AddGoodDTO.Attr> attrs = dto.getAttrs();
-        List<RGoodAttribute> rGoodAttributes=new ArrayList<>(10);
+        List<RGoodAttribute> rGoodAttributes = new ArrayList<>(10);
         attrs.forEach(attr -> {
             RGoodAttribute rGoodAttr = RGoodAttribute.builder()
                     .attrType(dto.getAttrType())
@@ -67,12 +65,26 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
                     .goodId(goodInfo.getId()).build();
             rGoodAttributes.add(rGoodAttr);
         });
+        List<RGoodPics> rGoodPics = dto.getRGoodPics();
+        for (RGoodPics rGoodPic : rGoodPics) {
+            rGoodPic.setGoodId(goodInfo.getId());
+            rGoodPic.setStatus("0");
+            rGoodPicsService.save(rGoodPic);
+        }
+//        int d = rGoodPicsService.insertBatchSomeColumn(rGoodPics); //批量插入不能插入status？
+//        if (d == 0) return e;
         return rGoodAttributeDao.insertBatchSomeColumn(rGoodAttributes);
     }
 
     @Override
     public IPage<GoodInfo> selectPage(GoodInfo goodInfo, QueryWrapper<GoodInfo> wrapper) {
-        return super.selectPage(goodInfo, wrapper);
+        IPage<GoodInfo> page = super.selectPage(goodInfo, wrapper);
+        page.getRecords().forEach(info -> {
+            String id = info.getId();
+            List<RGoodPics> list = rGoodPicsService.lambdaQuery().eq(RGoodPics::getGoodId, id).list();
+            info.setGoodPics(list);
+        });
+        return page;
     }
 
     @Override
