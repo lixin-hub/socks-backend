@@ -15,3 +15,7 @@ spring:
         cluster-name: CQ
   application:
     name: file-service
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
