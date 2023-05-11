@@ -10,7 +10,7 @@ public interface SpiceBaseMapper<T> extends BaseMapper<T> {
 
     /**
      * 批量插入
-     * {@link com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn}
+     * {@link com.baomidou.mybatisplus.extension.injector.methods.InsertBatchSomeColumn}ol
      *
      * @param entityList 要插入的数据
      * @return 成功插入的数据条数

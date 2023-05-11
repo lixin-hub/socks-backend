@@ -23,7 +23,8 @@ public class TokenFilter implements GlobalFilter {
     static {
         filters = new HashSet<>();
         filters.add("/auth");
-        filters.add("/file");
+        filters.add("/file/download");
+        filters.add("/file/preview");
     }
 
     @Override

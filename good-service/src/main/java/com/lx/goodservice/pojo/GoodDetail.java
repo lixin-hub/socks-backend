@@ -15,7 +15,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class GoodDetail extends Entity<GoodDetail> {
-  @TableId(type = IdType.ASSIGN_UUID)
+  @TableId(type = IdType.INPUT)
   private String id;
   private String goodIntroduce;
   private String lastIntroduce;

@@ -1,8 +1,8 @@
 package com.lx.goodservice.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lx.common.base.BaseService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lx.goodservice.dao.GoodInfoDao;
 import com.lx.goodservice.dao.RGoodAttributeDao;
 import com.lx.goodservice.dto.AddGoodDTO;
@@ -22,14 +22,15 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
+public class GoodInfoService extends ServiceImpl<GoodInfoDao, GoodInfo> {
     @Autowired
     GoodPriceService goodPriceService;
     @Autowired
     GoodDetailService goodDetailService;
     @Autowired
     RGoodPicsService rGoodPicsService;
-
+    @Autowired
+    RGoodAttributeService rGoodAttributeService;
     @Resource
     RGoodAttributeDao rGoodAttributeDao;
 
@@ -37,24 +38,22 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
      * 保存商品信息
      */
     @Transactional(rollbackFor = Exception.class)
-    public int addGoodInfo(AddGoodDTO dto) {
+    public boolean addGoodInfo(AddGoodDTO dto) {
         GoodInfo goodInfo = GoodInfo.builder()
                 .goodName(dto.getGoodName())
+                .block(dto.getBlock())
                 .stoke(Long.valueOf(dto.getGoodStoke())).build();
-        int a = super.insert(goodInfo);
-        if (a == 0) return a;
+        if (!super.save(goodInfo)) return false;
         GoodPrice price = GoodPrice.builder()
                 .price(dto.getGoodPrice())
-                .isNew(true)
+                .isNew(GoodPrice.NEW)
                 .goodId(goodInfo.getId()).build();
-        int b = goodPriceService.insert(price);
-        if (b == 0) return b;
+        if (!goodPriceService.save(price)) return false;
         GoodDetail detail = GoodDetail.builder()
                 .id(goodInfo.getId())
                 .goodIntroduce(dto.getGoodIntroduce())
                 .catOneLevel(dto.getGoodCat()).build();
-        int e = goodDetailService.insert(detail);
-        if (e == 0) return e;
+        if (!goodDetailService.save(detail)) return false;
         List<AddGoodDTO.Attr> attrs = dto.getAttrs();
         List<RGoodAttribute> rGoodAttributes = new ArrayList<>(10);
         attrs.forEach(attr -> {
@@ -73,22 +72,61 @@ public class GoodInfoService extends BaseService<GoodInfo, GoodInfoDao> {
         }
 //        int d = rGoodPicsService.insertBatchSomeColumn(rGoodPics); //批量插入不能插入status？
 //        if (d == 0) return e;
-        return rGoodAttributeDao.insertBatchSomeColumn(rGoodAttributes);
+        return rGoodAttributeDao.insertBatchSomeColumn(rGoodAttributes) > 0;
     }
 
     @Override
-    public IPage<GoodInfo> selectPage(GoodInfo goodInfo, QueryWrapper<GoodInfo> wrapper) {
-        IPage<GoodInfo> page = super.selectPage(goodInfo, wrapper);
-        page.getRecords().forEach(info -> {
+    public <E extends IPage<GoodInfo>> E page(E page, Wrapper<GoodInfo> queryWrapper) {
+        E mPage = super.page(page, queryWrapper);
+        mPage.getRecords().forEach(info -> {
             String id = info.getId();
             List<RGoodPics> list = rGoodPicsService.lambdaQuery().eq(RGoodPics::getGoodId, id).list();
             info.setGoodPics(list);
         });
-        return page;
+        return mPage;
     }
 
-    @Override
     public GoodInfo selectById(Serializable id) {
-        return super.selectById(id);
+        GoodInfo goodInfo = getById(id);
+        List<RGoodPics> list = rGoodPicsService.lambdaQuery().eq(RGoodPics::getGoodId, id).list();
+        goodInfo.setGoodPics(list);
+        return goodInfo;
+    }
+
+    //更新商品
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateGoodInfo(AddGoodDTO dto) {
+        //更新商品
+        GoodInfo goodInfo = GoodInfo.builder()
+                .id(dto.getId())
+                .block(dto.getBlock())
+                .goodName(dto.getGoodName())
+                .stoke(Long.valueOf(dto.getGoodStoke())).build();
+        boolean b = super.updateById(goodInfo);
+        if (!b) return false;
+        //更新价格
+        if (!goodPriceService.updateAndSavePriceByGoodId(GoodPrice.builder()
+                .price(dto.getGoodPrice())
+                .goodId(dto.getId())
+                .isNew(GoodPrice.NEW).build()))
+            return false;
+        //更新商品详情
+        if (goodDetailService.updateById(GoodDetail.builder()
+                .id(goodInfo.getId())
+                .goodIntroduce(dto.getGoodIntroduce())
+                .catOneLevel(dto.getGoodCat()).build()))
+            return false;
+//        更新属性
+        List<AddGoodDTO.Attr> attrs = dto.getAttrs();
+        List<RGoodAttribute> rGoodAttributes = new ArrayList<>(10);
+        attrs.forEach(attr -> rGoodAttributes.add(RGoodAttribute.builder()
+                .attrType(dto.getAttrType())
+                .attrId(attr.getAttrId())
+                .value(attr.getAttrValue())
+                .goodId(goodInfo.getId()).build()));
+        if (!rGoodAttributeService.updateBatchById(rGoodAttributes)) return false;
+        //更新图片
+        List<RGoodPics> rGoodPics = dto.getRGoodPics();
+        return rGoodPicsService.updateByGoodId(dto.getId(), rGoodPics);
     }
 }

@@ -1,6 +1,6 @@
 package com.lx.goodservice.controller;
 
-import com.lx.common.base.BaseController;
+import com.lx.common.base.BaseControllerImpl;
 import com.lx.common.base.Result;
 import com.lx.goodservice.dao.GoodInfoDao;
 import com.lx.goodservice.dto.AddGoodDTO;
@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("good")
 @Slf4j
-public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
+public class GoodInfoController extends BaseControllerImpl<GoodInfoDao, GoodInfo> {
 
 
     @PostMapping("page")
@@ -50,8 +50,8 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
 
     @PostMapping("listId")
     public Object selectBatchIds(@RequestBody List<Serializable> idList) {
-        if (idList==null||idList.size()==0){
-            return Result.builder().notOk(400,"参数为空").build();
+        if (idList == null || idList.size() == 0) {
+            return Result.builder().notOk(400, "参数为空").build();
         }
         return super.selectBatchIds(idList);
     }
@@ -65,7 +65,7 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     @RequiresPermissions("goods:add")
     public Object addGoodInfo(@RequestBody AddGoodDTO entity) {
         if (entity == null) {
-            return Result.builder().notOk(400).message("参数为空~").build();
+            return Result.builder().notOk(400).message("参数为空").build();
         }
         if (StringUtils.isBlank(entity.getGoodName()) ||
                 entity.getGoodPrice() == 0 ||
@@ -73,9 +73,13 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
         ) {
             return Result.builder().notOk(400).message("参数错误").data(entity).build();
         }
+        if (!StringUtils.isBlank(entity.getId())) {
+            boolean isOk = ((GoodInfoService) service).updateGoodInfo(entity);
+            return Result.builder().status(isOk).build();
 
-        int i = ((GoodInfoService) service).addGoodInfo(entity);
-        return Result.builder().status(i > 0).build();
+        }
+        boolean isOk = ((GoodInfoService) service).addGoodInfo(entity);
+        return Result.builder().status(isOk).message(isOk?"添加成功":"添加失败").build();
     }
 
     @PostMapping("delete")
@@ -95,6 +99,7 @@ public class GoodInfoController extends BaseController<GoodInfo, GoodInfoDao> {
     public Object deleteBatchIds(Collection<? extends Serializable> idList) {
         return super.deleteBatchIds(idList);
     }
+
     @PostMapping("updateById")
     public Object updateById(@RequestBody GoodInfo entity) {
         return super.updateById(entity);

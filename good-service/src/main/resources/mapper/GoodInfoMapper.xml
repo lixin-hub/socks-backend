@@ -18,7 +18,7 @@
 
     <select id="selectPage" resultMap="baseMap">
         select
-            good_info.id , good_name, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
+            good_info.id , good_name, up_time, down_time,block, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
             good_price.id pid, good_price.good_id, price, good_price.update_time, is_new, good_price.create_time, good_price.status,
             good_detail.id , good_introduce, last_introduce, good_detail.update_time, good_detail.create_time, cat_one_level, cat_tow_level, cat_three_level, good_detail.status,
             good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level
@@ -30,7 +30,7 @@
     </select>
     <select id="selectById" resultMap="baseMap">
         select
-            good_info.id , good_name, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
+            good_info.id , good_name, up_time,block, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
             good_price.id pid, good_price.good_id, price, good_price.update_time, is_new, good_price.create_time, good_price.status,
             good_detail.id , good_introduce, last_introduce, good_detail.update_time, good_detail.create_time, cat_one_level, cat_tow_level, cat_three_level, good_detail.status,
             good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level
@@ -44,7 +44,7 @@
 
     <select id="selectBatchIds" parameterType="list" resultMap="baseMap" >
         select
-        good_info.id , good_name, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
+        good_info.id , good_name,block, up_time, down_time, stoke, good_info.update_time, good_info.create_time, good_info.status, good_big_pic,
         good_price.id pid, good_price.good_id, price, good_price.update_time, is_new, good_price.create_time, good_price.status,
         good_detail.id , good_introduce, last_introduce, good_detail.update_time, good_detail.create_time, cat_one_level, cat_tow_level, cat_three_level, good_detail.status,
         good_category.id, good_category.name, parent, good_category.create_time, good_category.update_time, good_category.status, good_category.level

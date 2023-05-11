@@ -29,8 +29,8 @@ public class Result<T> {
 
     public static class ResultBuilder<T> {
         Result<T> result;
-        private Object successMessage;
-        private Object failMessage;
+        private Object successMessage="success";
+        private Object failMessage="fail";
 
         public ResultBuilder() {
             result = new Result<>();

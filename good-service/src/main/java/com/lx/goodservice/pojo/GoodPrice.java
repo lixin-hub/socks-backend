@@ -14,12 +14,14 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class GoodPrice extends Entity<GoodPrice> {
+    public static int NEW =1;
+    public static int NOT_NEW=0;
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
-    private double price;
+    private Double price;
     private String  goodId;
     private Date updateTime;
-    private boolean isNew;
+    private int isNew;
 
 
 }

@@ -1,6 +1,7 @@
 package com.lx.goodservice.controller;
 
 import com.lx.common.base.BaseController;
+import com.lx.common.base.BaseControllerImpl;
 import com.lx.common.base.Result;
 import com.lx.goodservice.dao.GoodAttributeDao;
 import com.lx.goodservice.pojo.GoodAttribute;
@@ -20,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("good/attribute")
 @Slf4j
-public class GoodAttributeController extends BaseController<GoodAttribute, GoodAttributeDao> {
+public class GoodAttributeController extends BaseControllerImpl<GoodAttributeDao,GoodAttribute> {
 
 
     @PostMapping("page")

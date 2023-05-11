@@ -10,8 +10,9 @@ import java.util.List;
 
 @Data
 public class AddGoodDTO {
+    String id;
     String goodName;
-    Float goodPrice;
+    Double goodPrice;
     Integer goodStoke;//库存
     // 商品所属分类数组
     String goodCat;
@@ -22,6 +23,8 @@ public class AddGoodDTO {
     GoodAttribute goodAttribute;
     //商品属性
     List<Attr> attrs;
+    //商品分区
+    Integer block;
     //属性
     private String attrType;
 

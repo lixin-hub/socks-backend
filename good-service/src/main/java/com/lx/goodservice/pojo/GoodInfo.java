@@ -27,6 +27,10 @@ public class GoodInfo extends Entity<GoodInfo> {
     private String goodName;
     private Date upTime;
     private Date downTime;
+    /**
+     *如果该商品显示在首页那么应该显示在第几个板块
+     */
+    private Integer block;
 
     /**
      * 使用装箱类，防止初始化为0

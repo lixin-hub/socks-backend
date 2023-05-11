@@ -16,7 +16,7 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public Object excep(HttpServletRequest req, Exception e) {
         e.printStackTrace();
-        return Result.builder().notOk(500, e.getMessage()).build();
+        return Result.builder().notOk(500, "发送未知错误，请等待管理员修复！").build();
     }
 
     @ResponseBody
@@ -24,7 +24,7 @@ public class ExceptionController {
     public Object excep1(HttpServletRequest req, IllegalArgumentException e) {
         log.error("发生异常：{}", e.getMessage());
         e.printStackTrace();
-        return Result.builder().notOk(400, e.getMessage()).build();
+        return Result.builder().notOk(400, "参数异常，请检查参数！").build();
     }
 
     @ResponseBody
@@ -32,7 +32,7 @@ public class ExceptionController {
     public Object excep2(HttpServletRequest req, IllegalStateException e) {
         log.error("发生异常：{}", e.getMessage());
         e.printStackTrace();
-        return Result.builder().notOk(400, e.getMessage()).build();
+        return Result.builder().notOk(400, "该请求状态异常，请稍候重试！").build();
     }
     @ResponseBody
     @ExceptionHandler(UnauthorizedException.class)
@@ -46,6 +46,6 @@ public class ExceptionController {
     public Object excep3(HttpServletRequest req, RuntimeException e) {
         log.error("发生异常：{}", e.getMessage());
         e.printStackTrace();
-        return Result.builder().notOk(400,e.getMessage()).build();
+        return Result.builder().notOk(400,"发生运行时错误！请稍候再试").build();
     }
 }
